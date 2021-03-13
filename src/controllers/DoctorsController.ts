@@ -125,9 +125,9 @@ export default {
     return res.status(201).end();
   },
   async select(req: Request, res: Response) {
-    const { ...data } = req.query;
+    const { specialty, ...data } = req.query;
 
-    const doctors = await Doctor.findAll({
+    const [doctors] = await Doctor.findAll({
       where: {
         ...data,
       },
@@ -135,6 +135,12 @@ export default {
         {
           model: Specialty,
           as: "specialities",
+          through: {
+            attributes: [],
+          },
+          where: {
+            nome: specialty,
+          },
         },
       ],
     });
